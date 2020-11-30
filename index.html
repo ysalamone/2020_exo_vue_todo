@@ -17,6 +17,11 @@
         <input type="text" v-model="tache.lib" @keyup.enter="ajouterLigne()"/>
         <button @click="supprimerLigne(nLigne)">x</button>
     </div>
+    <ul>
+        <li>Nombre de tâches : {{ nbTaches }}</li>
+        <li>Nombre de tâches réalisées : {{ nbDone }}</li>
+        <li>Nombre de tâches à effectuer : {{ nbToDo }}</li>
+    </ul>
 </div>
 
 </body>
@@ -38,6 +43,18 @@
                 this.taches.splice(i, 1);
                 if(this.taches.length === 0)
                     this.ajouterLigne();
+            }
+        },
+        computed: {
+            nbTaches() {
+                return this.taches.length;
+            },
+            nbDone() {
+                let tabDone = this.taches.filter((tache) => tache.checked);
+                return tabDone.length;
+            },
+            nbToDo() {
+                return this.nbTaches - this.nbDone;
             }
         },
         mounted() {
