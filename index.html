@@ -11,7 +11,12 @@
 <body>
 
 <div id="app" class="container">
-
+    <h1>Ma to-do list</h1>
+    <div v-for="(tache, nLigne) in taches">
+        <input type="checkbox" v-model="tache.checked"/>
+        <input type="text" v-model="tache.lib" @keyup.enter="ajouterLigne()"/>
+        <button @click="supprimerLigne(nLigne)">x</button>
+    </div>
 </div>
 
 </body>
@@ -22,8 +27,26 @@
         el: '#app',
         data: function() {
             return {
-
+                taches: [{lib: '', checked: false}],
             }
+        },
+        methods: {
+            ajouterLigne() {
+                this.taches.push({lib: '', checked: false});
+            },
+            supprimerLigne(i) {
+                this.taches.splice(i, 1);
+                if(this.taches.length === 0)
+                    this.ajouterLigne();
+            }
+        },
+        mounted() {
+            if (localStorage.taches) {
+                this.taches = JSON.parse(localStorage.getItem('taches'));
+            }
+        },
+        updated() {
+            localStorage.setItem('taches', JSON.stringify(this.taches));
         }
     });
 </script>
